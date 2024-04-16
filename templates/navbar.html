@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <!-- Left side items -->
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'wishlist'%}">WishList</a>
+      </li>
+      
+    </ul>
+
+    <!-- Right side items -->
+    <ul class="navbar-nav ml-auto navbar-right">
+      {% if not request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'signup' %}">SignUp</a>
+        </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'contribution' %}">My Contribution</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'add-movies'%}">Add Movie</a>
+      </li>
+        <li>
+          <a class="nav-link" href="{% url 'logout' %}"><span aria-hidden="true"></span>&nbsp;Logout</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>

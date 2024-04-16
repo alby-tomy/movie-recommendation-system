@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block body %}
+<center>
+  <br />
+  <form method="POST" enctype="multipart/form-data" style="max-width: 400px; padding: 20px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    {% csrf_token %}
+    <label style="display: block; margin-bottom: 8px;">Movie Name:</label>
+    <input type="text" name="title" placeholder="Enter the movie name" value="{{ movie.title }}" style="width: 100%; padding: 8px; margin-bottom: 16px;" />
+
+    <label style="display: block; margin-bottom: 8px;">Genre</label>
+    <select name="genre" style="width: 100%; padding: 8px; margin-bottom: 16px; text-transform: capitalize;">
+      <option value="" >Select genre</option>
+      
+      {% for genre in genres %}
+        <option value="{{ genre.id }}" {% if genre.id == movie.genre.id %}selected{% endif %}>{{ genre.name }}</option>
+      {% endfor %}
+    </select>
+
+    <label style="display: block; margin-bottom: 8px;">Release year</label>
+    <input type="text" name="year" placeholder="Released year" value="{{ movie.year }}" style="width: 100%; padding: 8px; margin-bottom: 16px;" />
+
+    <label style="display: block; margin-bottom: 8px;">Description:</label>
+    <textarea name="description" placeholder="Write about the movie" style="width: 100%; padding: 8px; margin-bottom: 16px; resize: vertical;" rows="5">{{ movie.description }}</textarea>
+
+    <label style="display: block; margin-bottom: 8px;">Upload Image:</label>
+    <input type="file" name="movie-logo" style="margin-bottom: 16px;" />
+
+    <input type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;" />
+  </form>
+</center>
+
+{% endblock %}

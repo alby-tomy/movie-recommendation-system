@@ -1,0 +1,94 @@
+{% extends 'base.html'%}
+{% block title %}{{movies.title}}{% endblock %}
+
+{% block body %}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <div class="alert alert-success">
+              <strong>Success!</strong> {{message}}
+            </div>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="container" style="
+background-color:rgb(107, 223, 223);
+margin-top: 2%;
+padding-top: 2%;
+border-radius: 20px;" >
+    <div class="row">
+        <div class="col-md-6" style="
+            {% comment %} /* background-color: aqua; */ {% endcomment %}
+            padding: 2%;">
+            <img src="{{movies.movie_logo.url}}" width="80%" height="300" style="border-radius: 20px;"><br>
+        </div>
+        <div class="col-md-6" style="
+        {% comment %} padding: 1%;  {% endcomment %}
+        text-align:justify;">
+            <h4 style="text-transform:uppercase;">{{movies.title}}</h4>
+            <h4 style="text-transform:capitalize;">{{movies.genre}}</h4>
+            <h4>Released : {{movies.year}}</h4>
+
+            <h5 style="font-size: medium;">{{movies.description}}</h5>
+            <form class="form-horizontal" role="search" method="post" action="{% url 'detail' movies.id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="row">
+                                <div class="col-lg-14">
+                                    <div class="star-rating">
+                                        <span>Add to my list  </span>
+                                        {% if update %}
+                                        <input type="checkbox" name="watch" checked>
+                                        <input type="submit" class="button" value="Remove" name="watch">
+                                        {% else %}
+                                        <input type="checkbox" name="watch">
+                                        <input type="submit" class="button" value="Add">
+
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+<!--                            <input type="submit" class="button" value="Add">-->
+                        </div>
+                    </div>
+                </form>
+
+
+                <form class="form-horizontal" role="search" method="post" action="{% url 'detail' movies.id %}" onsubmit="return validateForm()" name="ratingForm">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="row">
+                                <div class="col-lg-14">
+                                    <div class="star-rating">
+                                        <span>Rate Movie</span>
+                                        <span class="fa fa-star-o" data-rating="1"></span>
+                                        <span class="fa fa-star-o" data-rating="2"></span>
+                                        <span class="fa fa-star-o" data-rating="3"></span>
+                                        <span class="fa fa-star-o" data-rating="4"></span>
+                                        <span class="fa fa-star-o" data-rating="5"></span>
+                                        
+                                        {% if rate_flag %}
+                                            <input type="hidden" name="rating" class="rating-value" value="{{movie_rating}}" >
+                                        {% else %}
+                                            <input type="hidden" name="rating" class="rating-value" value="0">
+                                        {% endif %}
+                                        {% csrf_token %}
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="submit" class="button" value="Submit">
+                        </div>
+                    </div>
+                </form>
+                
+                
+            <br>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

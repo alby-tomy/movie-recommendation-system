@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block body %}
+  <center>
+    <br />
+    <form method="POST" enctype="multipart/form-data" style="max-width: 400px; padding: 20px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+
+      {% csrf_token %}
+  
+      
+      <label for="{{ form.title.id_for_label }}" value="{{.title}}" style="display: block; width: 80%; margin-bottom: 8px;">Movie Name:</label>
+      {{ form.title }}
+  
+      <label for="{{ form.genre.id_for_label }}" style="display: block; width: 80%; margin-bottom: 8px;">Genre:</label>
+      {{ form.genre }}
+  
+      <label for="{{ form.year.id_for_label }}" style="display: block; width: 80%; margin-bottom: 8px;">Release year:</label>
+      {{ form.year }}
+  
+      <label for="{{ form.description.id_for_label }}" style="display: block; width: 80%; margin-bottom: 8px;">Description:</label>
+      {{ form.description }}
+  
+      <label for="{{ form.movie_logo.id_for_label }}" style="display: block; margin-bottom: 8px;">Upload Image:</label>
+        {{ form.movie_logo }}
+  
+      <input type="submit" style="background-color: #4CAF50; color: white; width: 80%; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;" />
+      
+  </form>
+  
+  
+  </center>
+{% endblock %}

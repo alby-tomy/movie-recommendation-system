@@ -1,0 +1,63 @@
+{% extends 'base.html'%}
+{%load static%}
+{% block body %}
+
+{% if not request.user.is_authenticated %}
+    <br>
+{% else %}
+    <center style="color:black"><h2>Welcome {{user.username}}!!</h2></center>
+{% endif %}
+
+<div class="container" >
+    <div class="col-xs-6 col-xs-offset-3">
+    	<form class="form-horizontal" role="search" method="get" action="{% url 'search' %}">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control input-lg " name="q" value="{{ request.GET.q }}" placeholder= "Search Movies "/>
+                    <span class='input-group-btn'>
+                        <button class='button1' type='submit'>Search</button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+ </div>
+
+
+ <p style="text-align:left;">
+    <span style="float:right;">
+        <a href="{% url 'index' %}" class="btn"><button style="color:#fff;background-color:#4CAF50;padding:10px">View List</button></a>
+    <h2>Movie List</h2>
+    </span>
+</p>
+<hr>
+<br>
+
+<!-- Movie list -->
+<center>
+<div class="row">
+    {% if genres_with_movies %}
+        {% for genre_with_movies in genres_with_movies %}
+            <div class="col-sm-12">
+                <h2 style="text-transform: capitalize;">{{ genre_with_movies.genre.name }}</h2>
+            </div>
+            {% for movie in genre_with_movies.movies %}
+                <div class="col-sm-2 col-md-2">
+                    <div class="thumbnail" style="border-radius: 20px;">
+                        <center>
+                            <h5 tyle="text-transform: uppercase;">{{ movie.title }}</h5>
+                        </center>
+                        <a href="{% url 'detail' movie.id %}">
+                            <img style= "width:80%; height: 200px; border-radius: 20px;" src="{{ movie.movie_logo.url }}" class="img-responsive">
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+</div>
+</center>
+
+
+
+{% endblock %}
