@@ -8,8 +8,10 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
-import pandas as pd
-from django.db.models import Case, When
+
+
+# import pandas as pd
+# from django.db.models import Case, When
 
 
 
@@ -135,14 +137,17 @@ def detail(request, movie_id):
             
         # For rating
         else:
-            rate = request.POST['rating']
-            if Myrating.objects.all().values().filter(movie_id=movie_id,user=request.user):
-                Myrating.objects.all().values().filter(movie_id=movie_id,user=request.user).update(rating=rate)
-            else:
-                q=Myrating(user=request.user,movie=movie,rating=rate)
-                q.save()
+            rate = request.POST.get('rating')  # Use get() method instead of directly accessing the key
+            if rate is not None:  # Check if the rating is not None
+                if Myrating.objects.filter(movie_id=movie_id, user=request.user).exists():
+                    Myrating.objects.filter(movie_id=movie_id, user=request.user).update(rating=rate)
+                else:
+                    q = Myrating(user=request.user, movie=movie, rating=rate)
+                    q.save()
 
-            messages.success(request, "Rating has been submitted!")
+                messages.success(request, "Rating has been submitted!")
+            else:
+                return redirect('wishlist') 
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     out = list(Myrating.objects.filter(user=request.user.id).values())
@@ -168,7 +173,7 @@ def wishList(request):
     if not request.user.is_active:
         raise Http404
 
-    movies = Movie.objects.filter(mylist__watch=True,mylist__user=request.user)
+    movies = Movie.objects.filter(mylist__watch=True, mylist__user=request.user)
     query = request.GET.get('q')
 
     if query:
@@ -284,19 +289,3 @@ def deleteMovie(request, movieId):
          movieID.delete()
          return redirect('contribution')
     return render(request,'delete.html')
-
-
-@login_required
-def rate_movie(request, movie_id):
-    movie = Movie.objects.get(pk=movie_id)
-    if request.method == 'POST':
-        form2 = RatingForm(request.POST)
-        if form2.is_valid():
-            rating = form2.save(commit=False)
-            rating.user = request.user
-            rating.movie = movie
-            rating.save()
-            return redirect('detail', movie_id=movie_id)
-    else:
-        form2 = RatingForm()
-    return render(request, 'detail.html', {'form2': form2, 'movie': movie})
